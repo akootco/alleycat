@@ -1,0 +1,8 @@
+name: AlleyCat
+version: '${version}'
+main: co.akoot.plugins.alleycat.AlleyCat
+api-version: '1.20'
+prefix: AC
+author: Akoot_
+website: https://akoot.cp/plugins/alleycat
+softdepend: [ 'BlueFox' ]
