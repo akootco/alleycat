@@ -13,26 +13,20 @@ repositories {
         name = 'papermc-repo'
         url = 'https://repo.papermc.io/repository/maven-public/'
     }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
-        name = 'jitpack'
-        url = 'https://jitpack.io/'
-    }
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    // Paper
     compileOnly 'io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT'
+
+    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.0"
 
-    // Dependency plugins
-    compileOnly 'net.luckperms:api:5.4'
+    // Modules
+    compileOnly project(":bluefox")
+
+    // Tests
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
 }
 
 processResources {
@@ -45,21 +39,7 @@ processResources {
 }
 
 shadowJar {
-    dependencies {
-        exclude(dependency('com.mojang:brigadier'))
-    }
-
-    relocate 'me.lucko.commodore', project.property('group')
-
     destinationDirectory = file('../test/server/plugins')
     archiveBaseName.set(project.property('modulename'))
     archiveClassifier.set('')
-}
-
-java {
-    sourceCompatibility = "21"
-    targetCompatibility = "21"
-}
-kotlin {
-    jvmToolchain(21)
 }
