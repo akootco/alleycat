@@ -1,8 +1,11 @@
 package co.akoot.plugins.alleycat
 
+import co.akoot.plugins.alleycat.commands.TestCommand
 import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.FoxPlugin
+import co.akoot.plugins.bluefox.util.ColorUtil
 import co.akoot.plugins.bluefox.util.TextUtil
+import co.akoot.plugins.bluefox.util.TimeUtil
 import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.ban.BanListType
 import net.kyori.adventure.text.Component
@@ -13,12 +16,8 @@ import java.util.*
 
 class AlleyCat : FoxPlugin() {
 
-    companion object {
-    }
-
     override fun register() {
         logger.info("I'll see what I can do...")
-        BlueFox.trace("hehehe.. - AlleyCat") // Test that PROVES we can reference BlueFox!!
     }
 
     override fun unregister() {
@@ -39,22 +38,26 @@ class AlleyCat : FoxPlugin() {
         return true
     }
 
-//    fun getBanQuery(entry: BanEntry<PlayerProfile>, showCreated: Boolean = false, anonymous: Boolean = false, now: Long = System.currentTimeMillis()): Component {
-//        val hasMessage = entry.reason != "Banned by an operator."
-//        val hasExpiration = entry.expiration != null
-//        return Component.text(entry.banTarget.name ?: "Player").color(COLOR_PLAYER)
-//            .append(Component.text(" was banned by ").color(COLOR_TEXT))
-//            .append(Component.text(if (anonymous) "CONSOLE" else  entry.source)).color(COLOR_PLAYER)
-//            .append(Component.text(if(showCreated) " on " else "").color(COLOR_TEXT))
-//            .append(if(showCreated) TimeUtil.getTimeComponent(entry.created.time, now) else TextUtil.EMPTY)
-//            .append(Component.text(if(hasMessage) "\n\"${entry.reason}\"" else "").color(COLOR_ACCENT))
-//            .append(Component.text(if(hasExpiration) "\nExpires: " else "").color(COLOR_TEXT))
-//            .append(if(hasExpiration) entry.expiration?.time?.let { TimeUtil.getTimeComponent(it, now) } ?: Component.text("NEVER").color(COLOR_NUMBER) else TextUtil.EMPTY)
-//    }
-//
-//    fun getBanQuery(player: OfflinePlayer, showCreated: Boolean = false, anonymous: Boolean = false, now: Long = System.currentTimeMillis()): Component {
-//        val banList = server.getBanList(BanListType.PROFILE)
-//        val entry = banList.getBanEntry(player.playerProfile) ?: return Component.text("${player.name} is not banned.").color(COLOR_ERROR)
-//        return getBanQuery(entry, showCreated, anonymous, now)
-//    }
+    override fun registerCommands() {
+        registerCommand(TestCommand(this))
+    }
+
+    fun getBanQuery(entry: BanEntry<PlayerProfile>, showCreated: Boolean = false, anonymous: Boolean = false, now: Long = System.currentTimeMillis()): Component {
+        val hasMessage = entry.reason != "Banned by an operator."
+        val hasExpiration = entry.expiration != null
+        return Component.text(entry.banTarget.name ?: "Player").color(ColorUtil.getColor("player"))
+            .append(Component.text(" was banned by ").color(ColorUtil.getColor("text")))
+            .append(Component.text(if (anonymous) "CONSOLE" else  entry.source)).color(ColorUtil.getColor("player"))
+            .append(Component.text(if(showCreated) " on " else "").color(ColorUtil.getColor("text")))
+            .append(if(showCreated) TimeUtil.getTimeComponent(entry.created.time, now) else TextUtil.EMPTY)
+            .append(Component.text(if(hasMessage) "\n\"${entry.reason}\"" else "").color(ColorUtil.getColor("accent")))
+            .append(Component.text(if(hasExpiration) "\nExpires: " else "").color(ColorUtil.getColor("text")))
+            .append(if(hasExpiration) entry.expiration?.time?.let { TimeUtil.getTimeComponent(it, now) } ?: Component.text("NEVER").color(ColorUtil.getColor("number")) else TextUtil.EMPTY)
+    }
+
+    fun getBanQuery(player: OfflinePlayer, showCreated: Boolean = false, anonymous: Boolean = false, now: Long = System.currentTimeMillis()): Component {
+        val banList = server.getBanList(BanListType.PROFILE)
+        val entry = banList.getBanEntry(player.playerProfile) ?: return Component.text("${player.name} is not banned.").color(ColorUtil.getColor("error_text"))
+        return getBanQuery(entry, showCreated, anonymous, now)
+    }
 }
