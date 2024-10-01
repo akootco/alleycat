@@ -35,7 +35,7 @@ class TestCommand(plugin: FoxPlugin) : FoxCommand(plugin, "test", "t") {
         )
         sendMessage(sender, "Hello @PLAYER", "PLAYER" to sender.name)
         sendMessage(sender, "@PLAYER hello", "PLAYER" to sender.name)
-        sendMessage(sender, BlueFox.test)
+        sendMessage(sender, BlueFox.test ?: "???")
         return true
     }
 }
