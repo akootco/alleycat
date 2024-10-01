@@ -1,5 +1,6 @@
 package co.akoot.plugins.alleycat.commands
 
+import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.FoxPlugin
 import co.akoot.plugins.bluefox.util.Txt
@@ -12,25 +13,29 @@ class TestCommand(plugin: FoxPlugin) : FoxCommand(plugin, "test", "t") {
         return mutableListOf()
     }
 
-    override fun onCommand(sender: CommandSender, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, alias: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
         sendMessage(
             sender,
-            "Hello @PLAYER, today is the #NUMBERst day of the year!",
+            "Hello @PLAYER, today (\$WEST) is the #{NUMBER}st day of the year!",
             "PLAYER" to sender.name,
+            "NUMBER" to 101,
+            "TEST" to "nice",
+            "WEST" to "west"
+        )
+        sendMessage(
+            sender,
+            "Hello @PLAYER, today is the #{NUMBER}st day of the year!",
+            "PLAYER" to sender.displayName(),
             "NUMBER" to 101
         )
         sendMessage(
             sender,
-            "@PLAYER, today is the #NUMBERst day of the year!",
-            "PLAYER" to sender.displayName(),
-            "NUMBER" to 101
+            "Hello."
         )
-        sender.sendMessage(Txt("hey").c)
-        sender.sendMessage(Txt("hey", 0xff0000).c)
-        sender.sendMessage(Txt("do not click here pal", 0xff0000).run("/kill").c)
-        sender.sendMessage(Txt("do not click here pal", 0xff0000).hover("buddy..?").run("/kill").c)
-        sender.sendMessage(Txt("do not click here pal", 0xff0000).hover(Txt("buddy..?", 0x00aa00)).run("/kill").c)
+        sendMessage(sender, "Hello @PLAYER", "PLAYER" to sender.name)
+        sendMessage(sender, "@PLAYER hello", "PLAYER" to sender.name)
+        sendMessage(sender, BlueFox.test)
         return true
     }
 }

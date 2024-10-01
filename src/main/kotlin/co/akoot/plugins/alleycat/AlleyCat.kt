@@ -81,11 +81,11 @@ class AlleyCat : FoxPlugin() {
             .append(Component.text(" was banned by ").color(ColorUtil.getColor("text")))
             .append(Component.text(if (anonymous) "CONSOLE" else entry.source)).color(ColorUtil.getColor("player"))
             .append(Component.text(if (showCreated) " on " else "").color(ColorUtil.getColor("text")))
-            .append(if (showCreated) TimeUtil.getTimeComponent(entry.created.time, now) else TextUtil.EMPTY)
+            .append(if (showCreated) TimeUtil.getTimeComponent(entry.created.time, now) else Component.empty())
             .append(Component.text(if (hasMessage) "\n\"${entry.reason}\"" else "").color(ColorUtil.getColor("accent")))
             .append(Component.text(if (hasExpiration) "\nExpires: " else "").color(ColorUtil.getColor("text")))
             .append(if (hasExpiration) entry.expiration?.time?.let { TimeUtil.getTimeComponent(it, now) }
-                ?: Component.text("NEVER").color(ColorUtil.getColor("number")) else TextUtil.EMPTY)
+                ?: Component.text("NEVER").color(ColorUtil.getColor("number")) else Component.empty())
     }
 
     /**
