@@ -17,11 +17,11 @@ import java.util.*
  */
 class AlleyCat : FoxPlugin() {
 
-    override fun register() {
+    override fun load() {
         logger.info("I'll see what I can do...!")
     }
 
-    override fun unregister() {
+    override fun unload() {
         // Plugin shutdown logic
     }
 
