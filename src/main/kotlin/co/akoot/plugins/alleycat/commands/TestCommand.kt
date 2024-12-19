@@ -35,7 +35,6 @@ class TestCommand(plugin: FoxPlugin) : FoxCommand(plugin, "test", "t") {
         )
         sendMessage(sender, "Hello @PLAYER", "PLAYER" to sender.name)
         sendMessage(sender, "@PLAYER hello", "PLAYER" to sender.name)
-        sendMessage(sender, "I like \$MATERIAL the most!", "MATERIAL" to BlueFox.enumTest?.name)
         sendMessage(sender, "It is now \$TIME", "TIME" to BlueFox.settings.getLong("time"))
         BlueFox.settings.set("time", System.currentTimeMillis())
         return true

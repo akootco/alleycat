@@ -1,5 +1,6 @@
 package co.akoot.plugins.alleycat
 
+import co.akoot.plugins.alleycat.commands.GamemodeCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
 import co.akoot.plugins.bluefox.api.FoxPlugin
 import co.akoot.plugins.bluefox.util.ColorUtil
@@ -15,7 +16,7 @@ import java.util.*
 /**
  * A FoxPlugin that aims to take care of administration aspects of the server
  */
-class AlleyCat : FoxPlugin() {
+class AlleyCat : FoxPlugin("alleycat") {
 
     override fun load() {
         logger.info("I'll see what I can do...!")
@@ -64,6 +65,7 @@ class AlleyCat : FoxPlugin() {
      */
     override fun registerCommands() {
         registerCommand(TestCommand(this))
+        registerCommand(GamemodeCommand(this))
     }
 
     /**
