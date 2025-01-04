@@ -9,11 +9,11 @@ import org.bukkit.entity.Player
 
 class TestCommand(plugin: FoxPlugin) : FoxCommand(plugin, "test", "t") {
 
-    override fun onTabComplete(sender: CommandSender, args: Array<out String>?): MutableList<String> {
+    override fun onTabComplete(sender: CommandSender, args: Array<out String>): MutableList<String> {
         return mutableListOf()
     }
 
-    override fun onCommand(sender: CommandSender, alias: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, alias: String, args: Array<out String>): Boolean {
         if (sender !is Player) return false
         sendMessage(
             sender,
