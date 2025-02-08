@@ -32,10 +32,7 @@ class GamemodeCommand(plugin: FoxPlugin): FoxCommand(
         }
     }
 
-    override fun onTabComplete(
-        sender: CommandSender,
-        args: Array<out String>
-    ): MutableList<String> {
+    override fun onTabComplete(sender: CommandSender, alias: String, args: Array<out String>): MutableList<String> {
         if (args.size == 1) return GameMode.entries.map { it.name.lowercase() }.toMutableList()
         else if (args.size > 1 && hasPermission(sender, "target")) return getOnlinePlayerSuggestions(args)
         return mutableListOf()
