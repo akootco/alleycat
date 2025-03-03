@@ -1,7 +1,10 @@
 package co.akoot.plugins.alleycat
 
 import co.akoot.plugins.alleycat.commands.GamemodeCommand
+import co.akoot.plugins.alleycat.commands.IncapacitateCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
+import co.akoot.plugins.alleycat.extensions.isIncapacitated
+import co.akoot.plugins.alleycat.listeners.PlayerListener
 import co.akoot.plugins.bluefox.api.FoxPlugin
 import co.akoot.plugins.bluefox.util.ColorUtil
 import co.akoot.plugins.bluefox.util.TextUtil
@@ -10,13 +13,22 @@ import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.ban.BanListType
 import net.kyori.adventure.text.Component
 import org.bukkit.BanEntry
+import org.bukkit.NamespacedKey
 import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Player
+import org.bukkit.event.Listener
 import java.util.*
 
 /**
  * A FoxPlugin that aims to take care of administration aspects of the server
  */
 class AlleyCat : FoxPlugin("alleycat") {
+
+    companion object {
+        fun key(key: String): NamespacedKey  {
+            return NamespacedKey("alleycat", key)
+        }
+    }
 
     override fun load() {
         logger.info("I'll see what I can do...!")
@@ -25,6 +37,13 @@ class AlleyCat : FoxPlugin("alleycat") {
     override fun unload() {
         // Plugin shutdown logic
     }
+
+    override fun registerEvents() {
+        registerEventListener(PlayerListener(this))
+    }
+
+    val incapacitatedPlayers: List<Player>
+        get() = server.onlinePlayers.filter { it.isIncapacitated }
 
     /**
      * Bans a player
@@ -64,8 +83,9 @@ class AlleyCat : FoxPlugin("alleycat") {
      * Register all the commands for this plugin
      */
     override fun registerCommands() {
-        registerCommand(TestCommand(this))
-        registerCommand(GamemodeCommand(this))
+//        registerCommand(TestCommand(this))
+//        registerCommand(GamemodeCommand(this))
+        registerCommand(IncapacitateCommand(this))
     }
 
     /**
