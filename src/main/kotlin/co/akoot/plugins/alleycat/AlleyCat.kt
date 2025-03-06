@@ -3,6 +3,7 @@ package co.akoot.plugins.alleycat
 import co.akoot.plugins.alleycat.commands.GamemodeCommand
 import co.akoot.plugins.alleycat.commands.IncapacitateCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
+import co.akoot.plugins.alleycat.commands.WhenCommand
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.alleycat.listeners.PlayerListener
 import co.akoot.plugins.bluefox.api.FoxPlugin
@@ -83,45 +84,8 @@ class AlleyCat : FoxPlugin("alleycat") {
      * Register all the commands for this plugin
      */
     override fun registerCommands() {
-//        registerCommand(TestCommand(this))
-//        registerCommand(GamemodeCommand(this))
+        registerCommand(TestCommand(this))
         registerCommand(IncapacitateCommand(this))
-    }
-
-    /**
-     *
-     */
-    fun getBanQuery(
-        entry: BanEntry<PlayerProfile>,
-        showCreated: Boolean = false,
-        anonymous: Boolean = false,
-        now: Long = System.currentTimeMillis()
-    ): Component {
-        val hasMessage = entry.reason != "Banned by an operator."
-        val hasExpiration = entry.expiration != null
-        return Component.text(entry.banTarget.name ?: "Player").color(ColorUtil.getColor("player"))
-            .append(Component.text(" was banned by ").color(ColorUtil.getColor("text")))
-            .append(Component.text(if (anonymous) "CONSOLE" else entry.source)).color(ColorUtil.getColor("player"))
-            .append(Component.text(if (showCreated) " on " else "").color(ColorUtil.getColor("text")))
-            .append(if (showCreated) TimeUtil.getTimeComponent(entry.created.time, now) else Component.empty())
-            .append(Component.text(if (hasMessage) "\n\"${entry.reason}\"" else "").color(ColorUtil.getColor("accent")))
-            .append(Component.text(if (hasExpiration) "\nExpires: " else "").color(ColorUtil.getColor("text")))
-            .append(if (hasExpiration) entry.expiration?.time?.let { TimeUtil.getTimeComponent(it, now) }
-                ?: Component.text("NEVER").color(ColorUtil.getColor("number")) else Component.empty())
-    }
-
-    /**
-     *
-     */
-    fun getBanQuery(
-        player: OfflinePlayer,
-        showCreated: Boolean = false,
-        anonymous: Boolean = false,
-        now: Long = System.currentTimeMillis()
-    ): Component {
-        val banList = server.getBanList(BanListType.PROFILE)
-        val entry = banList.getBanEntry(player.playerProfile) ?: return Component.text("${player.name} is not banned.")
-            .color(ColorUtil.getColor("error_text"))
-        return getBanQuery(entry, showCreated, anonymous, now)
+        registerCommand(WhenCommand(this))
     }
 }

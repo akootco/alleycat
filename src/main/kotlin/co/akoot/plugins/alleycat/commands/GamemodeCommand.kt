@@ -2,6 +2,8 @@ package co.akoot.plugins.alleycat.commands
 
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.FoxPlugin
+import co.akoot.plugins.bluefox.api.Kolor
+import co.akoot.plugins.bluefox.util.Text.Companion.plus
 import org.bukkit.GameMode
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -17,18 +19,11 @@ class GamemodeCommand(plugin: FoxPlugin): FoxCommand(
     companion object{
         fun setGameMode(sender: CommandSender, target: Player, gameMode: GameMode) {
             val gameModeName = gameMode.name.lowercase().replaceFirstChar(Char::titlecase)
-            val message = if (sender == target) getMessage(
-                "Set @YOUR gamemode to \$GAME_MODE.",
-                "YOUR" to "your",
-                "GAME_MODE" to gameModeName
-            )
-            else getMessage(
-                "Set @TARGET's gamemode to \$GAME_MODE.",
-                "GAME_MODE" to gameModeName,
-                "TARGET" to target.name
-            )
+            val message =Kolor.TEXT("Set ") +
+                    if(sender == target) Kolor.ACCENT("your") else (target.displayName() + Kolor.TEXT("'s"))
+                        Kolor.TEXT(" gamemode to ") + Kolor.ACCENT(gameModeName)
             target.gameMode = gameMode
-            target.sendMessage(message)
+            message.send(sender)
         }
     }
 
