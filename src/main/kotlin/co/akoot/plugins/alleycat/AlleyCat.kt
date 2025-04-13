@@ -8,7 +8,6 @@ import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.alleycat.listeners.PlayerListener
 import co.akoot.plugins.bluefox.api.FoxPlugin
 import co.akoot.plugins.bluefox.util.ColorUtil
-import co.akoot.plugins.bluefox.util.TextUtil
 import co.akoot.plugins.bluefox.util.TimeUtil
 import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.ban.BanListType
