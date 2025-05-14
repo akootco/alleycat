@@ -6,6 +6,8 @@ import co.akoot.plugins.alleycat.extensions.Key.CAN_BREAK_BLOCKS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_PICK_UP_ITEMS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_PLACE_BLOCKS
 import co.akoot.plugins.alleycat.extensions.Key.IS_MUTED
+import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_ADVANCEMENTS
+import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_DEATH
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_JOIN
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
@@ -24,6 +26,8 @@ object Key {
     const val CAN_ATTACK = "can_attack"
     const val IS_SILENT_JOIN = "is_silent_join"
     const val IS_SILENT_LEAVE = "is_silent_leave"
+    const val IS_SILENT_DEATH = "is_silent_death"
+    const val IS_SILENT_ADVANCEMENTS = "is_silent_advancements"
     const val RESTRAINING_ORDER_TARGETS = "restraining_order_targets"
 }
 
@@ -32,7 +36,7 @@ var Player.canPickUpItems: Boolean
     set(value) = setPDC(AlleyCat.key(CAN_PICK_UP_ITEMS), value)
 
 var Player.isMuted: Boolean
-    get() = getPDC<Boolean>(AlleyCat.key(IS_MUTED)) ?: true
+    get() = getPDC<Boolean>(AlleyCat.key(IS_MUTED)) ?: false
     set(value) = setPDC(AlleyCat.key(IS_MUTED), value)
 
 var Player.canBreakBlocks: Boolean
@@ -48,12 +52,20 @@ var Player.canAttack: Boolean
     set(value) = setPDC(AlleyCat.key(CAN_ATTACK), value)
 
 var Player.isSilentJoin: Boolean
-    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_JOIN)) ?: true
+    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_JOIN)) ?: false
     set(value) = setPDC(AlleyCat.key(IS_SILENT_JOIN), value)
 
 var Player.isSilentLeave: Boolean
-    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_LEAVE)) ?: true
+    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_LEAVE)) ?: false
     set(value) = setPDC(AlleyCat.key(IS_SILENT_LEAVE), value)
+
+var Player.isSilentDeath: Boolean
+    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_DEATH)) ?: false
+    set(value) = setPDC(AlleyCat.key(IS_SILENT_DEATH), value)
+
+var Player.isSilentAdvancements: Boolean
+    get() = getPDC<Boolean>(AlleyCat.key(IS_SILENT_ADVANCEMENTS)) ?: false
+    set(value) = setPDC(AlleyCat.key(IS_SILENT_ADVANCEMENTS), value)
 
 val Player.restrainingOrderTargets: List<Player>
     get() = getPDCList<Player>(AlleyCat.key(RESTRAINING_ORDER_TARGETS)) ?: listOf()

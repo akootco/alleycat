@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.server.ServerLoadEvent
 
@@ -22,7 +23,7 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onAsyncPlayerChat(event: AsyncChatEvent) {
-        event.isCancelled = !event.player.isMuted
+        event.isCancelled = event.player.isMuted
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -44,5 +45,15 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun onPlayerLeave(event: PlayerQuitEvent) {
         if(event.player.isSilentLeave) event.quitMessage(null)
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onPlayerDeath(event: PlayerDeathEvent) {
+        if(event.player.isSilentLeave) event.deathMessage(null)
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onPlayerAdvancementDone(event: PlayerAdvancementDoneEvent) {
+        if(event.player.isSilentAdvancements) event.message(null)
     }
 }

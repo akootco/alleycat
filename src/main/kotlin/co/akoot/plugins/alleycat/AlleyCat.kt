@@ -2,6 +2,7 @@ package co.akoot.plugins.alleycat
 
 import co.akoot.plugins.alleycat.commands.GamemodeCommand
 import co.akoot.plugins.alleycat.commands.IncapacitateCommand
+import co.akoot.plugins.alleycat.commands.SetCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
 import co.akoot.plugins.alleycat.commands.WhenCommand
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
@@ -83,8 +84,9 @@ class AlleyCat : FoxPlugin("alleycat") {
      * Register all the commands for this plugin
      */
     override fun registerCommands() {
-        registerCommand(TestCommand(this))
+//        registerCommand(TestCommand(this))
         registerCommand(IncapacitateCommand(this))
         registerCommand(WhenCommand(this))
+        registerCommand(SetCommand(this))
     }
 }
