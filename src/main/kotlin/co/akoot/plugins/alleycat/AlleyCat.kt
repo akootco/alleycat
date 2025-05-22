@@ -1,6 +1,8 @@
 package co.akoot.plugins.alleycat
 
+import co.akoot.plugins.alleycat.commands.FlyCommand
 import co.akoot.plugins.alleycat.commands.GamemodeCommand
+import co.akoot.plugins.alleycat.commands.HatCommand
 import co.akoot.plugins.alleycat.commands.IncapacitateCommand
 import co.akoot.plugins.alleycat.commands.SetCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
@@ -26,12 +28,14 @@ import java.util.*
 class AlleyCat : FoxPlugin("alleycat") {
 
     companion object {
+        lateinit var instance: AlleyCat
         fun key(key: String): NamespacedKey  {
             return NamespacedKey("alleycat", key)
         }
     }
 
     override fun load() {
+        instance = this
         logger.info("I'll see what I can do...!")
     }
 
@@ -88,5 +92,8 @@ class AlleyCat : FoxPlugin("alleycat") {
         registerCommand(IncapacitateCommand(this))
         registerCommand(WhenCommand(this))
         registerCommand(SetCommand(this))
+        registerCommand(FlyCommand(this))
+//        registerCommand(GamemodeCommand(this))
+//        registerCommand(HatCommand(this))
     }
 }

@@ -10,13 +10,18 @@ import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_ADVANCEMENTS
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_DEATH
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_JOIN
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
+import co.akoot.plugins.alleycat.extensions.Key.ALLOWED_PERMISSIONS
+import co.akoot.plugins.alleycat.extensions.Key.DISALLOWED_PERMISSIONS
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
+import co.akoot.plugins.bluefox.extensions.addToPDCList
 import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.getPDCList
+import co.akoot.plugins.bluefox.extensions.removeFromPDCList
 import co.akoot.plugins.bluefox.extensions.setPDC
-import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import org.bukkit.permissions.PermissionAttachment
 import java.util.*
+import kotlin.collections.set
 
 object Key {
     const val CAN_PICK_UP_ITEMS = "can_pickup_items"
@@ -29,6 +34,8 @@ object Key {
     const val IS_SILENT_DEATH = "is_silent_death"
     const val IS_SILENT_ADVANCEMENTS = "is_silent_advancements"
     const val RESTRAINING_ORDER_TARGETS = "restraining_order_targets"
+    const val ALLOWED_PERMISSIONS = "permissions.allowed"
+    const val DISALLOWED_PERMISSIONS = "permissions.disallowed"
 }
 
 var Player.canPickUpItems: Boolean
