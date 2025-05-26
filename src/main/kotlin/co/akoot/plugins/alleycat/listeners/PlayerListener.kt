@@ -2,6 +2,8 @@ package co.akoot.plugins.alleycat.listeners
 
 import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.alleycat.extensions.*
+import co.akoot.plugins.bluefox.extensions.getPDC
+import co.akoot.plugins.bluefox.extensions.isSurventure
 import io.papermc.paper.event.player.AsyncChatEvent
 import io.papermc.paper.event.player.PlayerPickItemEvent
 import org.bukkit.entity.Player
@@ -39,7 +41,9 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        if(event.player.isSilentJoin) event.joinMessage(null)
+        val player = event.player
+        if(player.isSilentJoin) event.joinMessage(null)
+        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -55,5 +59,17 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAdvancementDone(event: PlayerAdvancementDoneEvent) {
         if(event.player.isSilentAdvancements) event.message(null)
+    }
+
+    @EventHandler
+    fun onPlayerRespawn(event: PlayerRespawnEvent) {
+        val player = event.player
+        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+    }
+
+    @EventHandler
+    fun onPlayerGameModeChanged(event: PlayerGameModeChangeEvent) {
+        val player = event.player
+        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
     }
 }
