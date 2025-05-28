@@ -17,7 +17,7 @@ class SetCommand(plugin: AlleyCat): FoxCommand(plugin, "set") {
         args: Array<out String>
     ): MutableList<String> {
         return when(args.size) {
-            1 -> getOfflinePlayerSuggestions(args)
+            1 -> getOfflinePlayerSuggestions(args).also { it.add("\$world") }
             2 -> return mutableListOf(
                Key.CAN_PICK_UP_ITEMS,
                Key.IS_MUTED,
@@ -27,7 +27,8 @@ class SetCommand(plugin: AlleyCat): FoxCommand(plugin, "set") {
                Key.IS_SILENT_JOIN,
                Key.IS_SILENT_LEAVE,
                Key.IS_SILENT_DEATH,
-               Key.IS_SILENT_ADVANCEMENTS
+               Key.IS_SILENT_ADVANCEMENTS,
+                "advancements_disabled"
             )
             3 -> mutableListOf("true", "false")
             else -> mutableListOf()
@@ -39,11 +40,15 @@ class SetCommand(plugin: AlleyCat): FoxCommand(plugin, "set") {
         alias: String,
         args: Array<out String>
     ): Boolean {
-        val player = runCatching { getPlayer(args[0]).getAndSend(sender) }.getOrNull() ?: return false
+        val player = (if(args.getOrNull(0) == "\$world") getPlayerSender(sender).getAndSend(sender) else  runCatching { getPlayer(args[0]).getAndSend(sender) }.getOrNull()) ?: return false
         val key = runCatching { args[1] }.getOrNull()
         val value = runCatching { args[2].toBoolean() }.getOrNull()
         if(key == null || value == null) return sendUsage(sender)
-        player.setPDC<Boolean>(AlleyCat.key(key), value)
+        if(key == "advancements_disabled") {
+            player.world.setPDC(plugin.key("advancements_disabled"), value)
+        } else {
+            player.setPDC<Boolean>(AlleyCat.key(key), value)
+        }
         Text(sender) {
             Kolor.TEXT("Set ") + Kolor.ACCENT(key) + Kolor.TEXT(" to ") + Kolor.ACCENT(value.toString()) + Kolor.TEXT(" for ") + Kolor.ALT(player.name) + Kolor.TEXT(".")
         }

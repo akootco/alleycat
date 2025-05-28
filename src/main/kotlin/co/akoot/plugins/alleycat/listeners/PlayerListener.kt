@@ -4,6 +4,7 @@ import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.alleycat.extensions.*
 import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.isSurventure
+import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
 import io.papermc.paper.event.player.PlayerPickItemEvent
 import org.bukkit.entity.Player
@@ -71,5 +72,10 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     fun onPlayerGameModeChanged(event: PlayerGameModeChangeEvent) {
         val player = event.player
         if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onPlayerAdvancement(event: PlayerAdvancementCriterionGrantEvent) {
+        if(event.player.world.getPDC<Boolean>(plugin.key("advancements_disabled")) == true) event.isCancelled = true
     }
 }
