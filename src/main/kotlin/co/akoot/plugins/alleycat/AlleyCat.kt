@@ -93,7 +93,7 @@ class AlleyCat : FoxPlugin("alleycat") {
         registerCommand(WhenCommand(this))
         registerCommand(SetCommand(this))
         registerCommand(FlyCommand(this))
-//        registerCommand(GamemodeCommand(this))
-//        registerCommand(HatCommand(this))
+        registerCommand(GamemodeCommand(this))
+        registerCommand(HatCommand(this))
     }
 }
