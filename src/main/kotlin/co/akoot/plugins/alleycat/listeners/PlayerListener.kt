@@ -31,6 +31,7 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerBreakBlock(event: BlockBreakEvent) {
+        if (event.isCancelled) return
         event.isCancelled = !event.player.canBreakBlocks
     }
 
