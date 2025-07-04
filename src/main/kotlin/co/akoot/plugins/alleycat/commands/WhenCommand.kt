@@ -1,24 +1,18 @@
 package co.akoot.plugins.alleycat.commands
 
 import co.akoot.plugins.alleycat.AlleyCat
+import co.akoot.plugins.alleycat.When
+import co.akoot.plugins.alleycat.When.*
+import co.akoot.plugins.alleycat.extensions.addWhen
+import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.Kolor
 import co.akoot.plugins.bluefox.extensions.invoke
+import co.akoot.plugins.bluefox.extensions.setMeta
+import co.akoot.plugins.bluefox.extensions.setPDC
 import org.bukkit.command.CommandSender
 
 class WhenCommand(private val ac: AlleyCat): FoxCommand(ac, "when") {
-
-    enum class Event {
-        JOIN, QUIT, DIE, RESPAWN, TELEPORT, CHAT, ATTACK, SLEEP
-    }
-
-    enum class TimeFrame {
-        ONCE, ALWAYS
-    }
-
-    enum class Type {
-        RUN, COMPEL
-    }
 
     override fun onTabComplete(sender: CommandSender, alias: String, args: Array<out String>): MutableList<String> {
         return when(args.size) {
@@ -41,9 +35,9 @@ class WhenCommand(private val ac: AlleyCat): FoxCommand(ac, "when") {
             val event = runCatching { Event.valueOf(args[1].uppercase().removeSuffix("S")) }.getOrNull() ?: return sendUsage(sender)
             val timeFrame = runCatching { TimeFrame.valueOf(args[2].uppercase()) }.getOrNull() ?: return sendUsage(sender)
             val type = runCatching { Type.valueOf(args[3].uppercase()) }.getOrNull() ?: return sendUsage(sender)
-            val commandLine = args.drop(4).joinToString(" ")
+            val commandLine = args.drop(4).joinToString(" ").removePrefix("/")
             val timeFrameString = when(timeFrame) {
-                TimeFrame.ONCE -> "Next time "
+                TimeFrame.NEXT -> "Next time "
                 TimeFrame.ALWAYS -> "From this time forward and henceforth, whenever "
             }
             val typeString = when(type) {
@@ -54,9 +48,9 @@ class WhenCommand(private val ac: AlleyCat): FoxCommand(ac, "when") {
                     Kolor.PLAYER(name) +
                     Kolor.ACCENT(" ${event.name.lowercase()}s") +
                     Kolor.TEXT(", $typeString will run ") +
-                    Kolor.QUOTE(commandLine) +
+                    Kolor.QUOTE("/$commandLine") +
                     Kolor.TEXT(".")
-
+            BlueFox.world?.addWhen(player, When(event, timeFrame, type, commandLine))
             Result.success(message).getAndSend(sender)
         }
     }

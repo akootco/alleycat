@@ -1,6 +1,7 @@
 package co.akoot.plugins.alleycat.extensions
 
 import co.akoot.plugins.alleycat.AlleyCat
+import co.akoot.plugins.alleycat.When
 import co.akoot.plugins.alleycat.extensions.Key.CAN_ATTACK
 import co.akoot.plugins.alleycat.extensions.Key.CAN_BREAK_BLOCKS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_PICK_UP_ITEMS
@@ -13,11 +14,14 @@ import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
 import co.akoot.plugins.alleycat.extensions.Key.ALLOWED_PERMISSIONS
 import co.akoot.plugins.alleycat.extensions.Key.DISALLOWED_PERMISSIONS
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
+import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.extensions.addToPDCList
 import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.getPDCList
 import co.akoot.plugins.bluefox.extensions.removeFromPDCList
 import co.akoot.plugins.bluefox.extensions.setPDC
+import org.bukkit.OfflinePlayer
+import org.bukkit.World
 import org.bukkit.entity.Player
 import org.bukkit.permissions.PermissionAttachment
 import java.util.*
@@ -85,3 +89,7 @@ var Player.isIncapacitated: Boolean
         canAttack = !value
         canPlaceBlocks = !value
     }
+
+fun Player.executeWhen(event: When.Event) {
+    BlueFox.world?.getWhenDefinitions(this, event)?.forEach { it.execute(this) }
+}

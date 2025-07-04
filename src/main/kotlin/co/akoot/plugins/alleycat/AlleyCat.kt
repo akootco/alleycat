@@ -7,6 +7,7 @@ import co.akoot.plugins.alleycat.commands.IncapacitateCommand
 import co.akoot.plugins.alleycat.commands.SetCommand
 import co.akoot.plugins.alleycat.commands.TestCommand
 import co.akoot.plugins.alleycat.commands.WhenCommand
+import co.akoot.plugins.alleycat.commands.WhensCommand
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.alleycat.listeners.PlayerListener
 import co.akoot.plugins.bluefox.api.FoxPlugin
@@ -91,9 +92,10 @@ class AlleyCat : FoxPlugin("alleycat") {
 //        registerCommand(TestCommand(this))
         registerCommand(IncapacitateCommand(this))
         registerCommand(WhenCommand(this))
+        registerCommand(WhensCommand(this))
         registerCommand(SetCommand(this))
         registerCommand(FlyCommand(this))
-        registerCommand(GamemodeCommand(this))
-        registerCommand(HatCommand(this))
+//        registerCommand(GamemodeCommand(this))
+//        registerCommand(HatCommand(this))
     }
 }

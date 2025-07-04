@@ -1,12 +1,13 @@
 package co.akoot.plugins.alleycat.listeners
 
 import co.akoot.plugins.alleycat.AlleyCat
+import co.akoot.plugins.alleycat.When
 import co.akoot.plugins.alleycat.extensions.*
 import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.isSurventure
+import co.akoot.plugins.bluefox.util.sync
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
-import io.papermc.paper.event.player.PlayerPickItemEvent
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -15,7 +16,6 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.*
-import org.bukkit.event.server.ServerLoadEvent
 
 class PlayerListener(val plugin: AlleyCat): Listener {
 
@@ -27,6 +27,9 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onAsyncPlayerChat(event: AsyncChatEvent) {
         event.isCancelled = event.player.isMuted
+        sync {
+            event.player.executeWhen(When.Event.TALK)
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -38,7 +41,9 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAttack(event: EntityDamageByEntityEvent) {
         if (event.damager !is Player) return
-        event.isCancelled = !(event.damager as Player).canAttack
+        val player = event.damager as Player
+        event.isCancelled = !(player).canAttack
+        player.executeWhen(When.Event.ATTACK)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -46,16 +51,19 @@ class PlayerListener(val plugin: AlleyCat): Listener {
         val player = event.player
         if(player.isSilentJoin) event.joinMessage(null)
         if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+        player.executeWhen(When.Event.JOIN)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerLeave(event: PlayerQuitEvent) {
         if(event.player.isSilentLeave) event.quitMessage(null)
+        event.player.executeWhen(When.Event.LEAVE)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerDeath(event: PlayerDeathEvent) {
         if(event.player.isSilentLeave) event.deathMessage(null)
+        event.player.executeWhen(When.Event.DIE)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -67,6 +75,17 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     fun onPlayerRespawn(event: PlayerRespawnEvent) {
         val player = event.player
         if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+        player.executeWhen(When.Event.RESPAWN)
+    }
+
+    @EventHandler
+    fun onPlayerTeleport(event: PlayerTeleportEvent) {
+        event.player.executeWhen(When.Event.TELEPORT)
+    }
+
+    @EventHandler
+    fun onPlayerSleep(event: PlayerBedEnterEvent) {
+        event.player.executeWhen(When.Event.SLEEP)
     }
 
     @EventHandler
