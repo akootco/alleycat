@@ -34,15 +34,17 @@ class FlyCommand(plugin: AlleyCat): FoxCommand(plugin, "fly", aliases = arrayOf(
         }
         var success = false
         var toggle = true
+        val players = mutableListOf<String>()
         for(arg in args) {
             val player = getPlayer(arg).value ?: continue
+            players += player.name
             toggle = !player.allowFlight
             player.allowFlight = toggle
             success = true
         }
         if(success) {
             Text(sender) {
-                Kolor.TEXT(toggle.get("Enabled", "Disabled")) + Kolor.TEXT(" flight ") + Kolor.ALT("for some or all players")
+                Kolor.TEXT(toggle.get("Enabled", "Disabled")) + Kolor.TEXT(" flight ") + Kolor.TEXT("for ") + Text.list(players)
             }
             return true
         } else {
