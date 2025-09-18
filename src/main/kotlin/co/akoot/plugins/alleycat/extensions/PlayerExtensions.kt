@@ -12,6 +12,7 @@ import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_DEATH
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_JOIN
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
 import co.akoot.plugins.alleycat.extensions.Key.ALLOWED_PERMISSIONS
+import co.akoot.plugins.alleycat.extensions.Key.CAN_OPEN_CONTAINERS
 import co.akoot.plugins.alleycat.extensions.Key.DISALLOWED_PERMISSIONS
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
 import co.akoot.plugins.bluefox.BlueFox
@@ -38,6 +39,7 @@ object Key {
     const val IS_SILENT_DEATH = "is_silent_death"
     const val IS_SILENT_ADVANCEMENTS = "is_silent_advancements"
     const val RESTRAINING_ORDER_TARGETS = "restraining_order_targets"
+    const val CAN_OPEN_CONTAINERS = "can_open_containers"
     const val ALLOWED_PERMISSIONS = "permissions.allowed"
     const val DISALLOWED_PERMISSIONS = "permissions.disallowed"
 }
@@ -45,6 +47,10 @@ object Key {
 var Player.canPickUpItems: Boolean
     get() = getPDC<Boolean>(AlleyCat.key(CAN_PICK_UP_ITEMS)) ?: true
     set(value) = setPDC(AlleyCat.key(CAN_PICK_UP_ITEMS), value)
+
+var Player.canOpenContainers: Boolean
+    get() = getPDC<Boolean>(AlleyCat.key(CAN_OPEN_CONTAINERS)) ?: true
+    set(value) = setPDC(AlleyCat.key(CAN_OPEN_CONTAINERS), value)
 
 var Player.isMuted: Boolean
     get() = getPDC<Boolean>(AlleyCat.key(IS_MUTED)) ?: false
@@ -82,12 +88,13 @@ val Player.restrainingOrderTargets: List<Player>
     get() = getPDCList<Player>(AlleyCat.key(RESTRAINING_ORDER_TARGETS)) ?: listOf()
 
 var Player.isIncapacitated: Boolean
-    get() = !(canBreakBlocks && canPickUpItems && canAttack && canPlaceBlocks)
+    get() = !(canBreakBlocks && canPickUpItems && canAttack && canPlaceBlocks && canOpenContainers)
     set(value) {
         canBreakBlocks = !value
         canPickUpItems = !value
         canAttack = !value
         canPlaceBlocks = !value
+        canOpenContainers = !value
     }
 
 fun Player.executeWhen(event: When.Event) {

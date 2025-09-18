@@ -8,20 +8,29 @@ import co.akoot.plugins.bluefox.extensions.isSurventure
 import co.akoot.plugins.bluefox.util.sync
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
+import io.papermc.paper.event.player.PlayerDeepSleepEvent
+import org.bukkit.block.Container
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.*
+import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult
 
 class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerPickItem(event: PlayerAttemptPickupItemEvent) {
         event.isCancelled = !event.player.canPickUpItems
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onPlayerOpenContainer(event: PlayerInteractEvent) {
+        event.isCancelled = event.clickedBlock?.state is Container && !event.player.canOpenContainers
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -36,6 +45,12 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     fun onPlayerBreakBlock(event: BlockBreakEvent) {
         if (event.isCancelled) return
         event.isCancelled = !event.player.canBreakBlocks
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onPlayerPlaceBlock(event: BlockPlaceEvent) {
+        if (event.isCancelled) return
+        event.isCancelled = !event.player.canPlaceBlocks
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -62,7 +77,7 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerDeath(event: PlayerDeathEvent) {
-        if(event.player.isSilentLeave) event.deathMessage(null)
+        if(event.player.isSilentDeath) event.deathMessage(null)
         event.player.executeWhen(When.Event.DIE)
     }
 
@@ -85,7 +100,8 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler
     fun onPlayerSleep(event: PlayerBedEnterEvent) {
-        event.player.executeWhen(When.Event.SLEEP)
+        if (event.bedEnterResult == BedEnterResult.OK)
+            event.player.executeWhen(When.Event.SLEEP)
     }
 
     @EventHandler
