@@ -8,9 +8,9 @@ import co.akoot.plugins.bluefox.extensions.isSurventure
 import co.akoot.plugins.bluefox.util.sync
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
-import io.papermc.paper.event.player.PlayerDeepSleepEvent
 import org.bukkit.block.Container
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -30,7 +30,9 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerOpenContainer(event: PlayerInteractEvent) {
-        event.isCancelled = event.clickedBlock?.state is Container && !event.player.canOpenContainers
+        if (event.clickedBlock?.state is Container && !event.player.canOpenContainers) {
+            event.setUseInteractedBlock(Event.Result.DENY)
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
