@@ -4,7 +4,6 @@ import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.Kolor
-import co.akoot.plugins.bluefox.extensions.invoke
 import co.akoot.plugins.bluefox.extensions.names
 import co.akoot.plugins.bluefox.util.Text.Companion.now
 import co.akoot.plugins.bluefox.util.Text.Companion.plus
