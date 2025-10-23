@@ -13,22 +13,37 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
     // todo: improve
     val userMessageMap = mutableMapOf<Long, MutableSet<Long>>()
     val messageMap = mutableMapOf<Long, MutableSet<Long>>()
+    val repliesMap = mutableMapOf<Long, Pair<Long, Long>>()
+
+
     val limit = plugin.settings.getInt("penjamin.limit") ?: 5
 
-    fun reply(id: Long, message: Message) {
-        val messageId = messageMap.entries.find { id in it.value }?.key ?: return
+    fun reply(senderId: Long, referenceId: Long, replyIOd: Long, message: Message) {
+        val messageId = messageMap.entries.find { referenceId in it.value }?.key ?: return
         val userId = userMessageMap.entries.find { messageId in it.value }?.key ?: return
         plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
             channel.retrieveMessageById(messageId).queue { originalMessage ->
                 val finalMessage = message.contentRaw + message.attachments.joinToString("\n", prefix = "\n") { it.url }
-                originalMessage.reply(finalMessage).addEmbeds(message.embeds).addComponents(message.components).queue {
+                originalMessage.reply(finalMessage).addEmbeds(message.embeds).addComponents(message.components).queue { reply ->
                     message.addReaction(Emoji.fromUnicode("\uD83D\uDCE8")).queue()
+                    repliesMap[reply.idLong] = senderId to replyIOd
                 }
             }
         }
     }
 
     fun react(id: Long, emoji: Emoji, add: Boolean = true) {
+        val reply = repliesMap[id]
+        if(reply != null) {
+            val userId = reply.first
+            val messageId = reply.second
+            plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
+                channel.retrieveMessageById(messageId).queue { originalMessage ->
+                    originalMessage.addReaction(emoji).queue()
+                }
+            }
+            return
+        }
         val messageId = messageMap.entries.find { id in it.value }?.key ?: return
         val userId = userMessageMap.entries.find { messageId in it.value }?.key ?: return
         plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
@@ -67,13 +82,15 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
     }
 
     override fun onMessageReactionAdd(event: MessageReactionAddEvent) {
-        val originalSenderId = getSender(event.messageIdLong) ?: return
-        react(originalSenderId, event.emoji)
+        if (plugin.settings.getBoolean("penjamin.enabled") == false) return
+        if (event.channelType != ChannelType.PRIVATE) return
+        react(event.messageIdLong, event.emoji)
     }
 
     override fun onMessageReactionRemove(event: MessageReactionRemoveEvent) {
-        val originalSenderId = getSender(event.messageIdLong) ?: return
-        react(originalSenderId, event.emoji, add = false)
+        if (plugin.settings.getBoolean("penjamin.enabled") == false) return
+        if (event.channelType != ChannelType.PRIVATE) return
+        react(event.messageIdLong, event.emoji, add = false)
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
@@ -105,7 +122,7 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
                         plugin.settings.remove("penjamin.premium", originalSenderId)
                         message.addReaction(Emoji.fromUnicode("✅")).queue()
                     }
-                    else -> reply(it, message)
+                    else -> reply(sender, it, message.idLong, message)
                 }
                 return
             }
