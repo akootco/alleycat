@@ -40,7 +40,7 @@ class SetCommand(plugin: AlleyCat): FoxCommand(plugin, "set") {
         alias: String,
         args: Array<out String>
     ): Boolean {
-        val player = (if(args.getOrNull(0) == "\$world") getPlayerSender(sender).getAndSend(sender) else  runCatching { getPlayer(args[0]).getAndSend(sender) }.getOrNull()) ?: return false
+        val player = (if(args.getOrNull(0) == $$"$world") getPlayerSender(sender).getAndSend(sender) else  runCatching { getPlayer(args[0]).getAndSend(sender) }.getOrNull()) ?: return false
         val key = runCatching { args[1] }.getOrNull()
         val value = runCatching { args[2].toBoolean() }.getOrNull()
         if(key == null || value == null) return sendUsage(sender)

@@ -3,8 +3,11 @@ package co.akoot.plugins.alleycat.listeners
 import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.alleycat.When
 import co.akoot.plugins.alleycat.extensions.*
+import co.akoot.plugins.bluefox.api.Kolor
 import co.akoot.plugins.bluefox.extensions.getPDC
+import co.akoot.plugins.bluefox.extensions.invoke
 import co.akoot.plugins.bluefox.extensions.isSurventure
+import co.akoot.plugins.bluefox.extensions.sendActionBar
 import co.akoot.plugins.bluefox.util.sync
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -115,5 +118,17 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAdvancement(event: PlayerAdvancementCriterionGrantEvent) {
         if(event.player.world.getPDC<Boolean>(plugin.key("advancements_disabled")) == true) event.isCancelled = true
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onPlayerTeleportCheck(event: PlayerTeleportEvent) {
+        if (event.isCancelled) return
+        val to = event.to.world
+        if(to == event.from.world) return
+        val player = event.player
+        if(!event.player.hasPermission("alleycat.tp.world.${to.name.lowercase()}}")) {
+            player.sendActionBar(Kolor.WARNING("You can't go to ") + Kolor.WARNING.accent(to.name) + Kolor.WARNING("."))
+            event.isCancelled = true
+        }
     }
 }
