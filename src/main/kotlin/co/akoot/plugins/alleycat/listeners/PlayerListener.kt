@@ -126,7 +126,7 @@ class PlayerListener(val plugin: AlleyCat): Listener {
         val to = event.to.world
         if(to == event.from.world) return
         val player = event.player
-        if(!event.player.hasPermission("alleycat.tp.world.${to.name.lowercase()}}")) {
+        if(!event.player.hasPermission("alleycat.tp.world.${to.name.lowercase()}")) {
             player.sendActionBar(Kolor.WARNING("You can't go to ") + Kolor.WARNING.accent(to.name) + Kolor.WARNING("."))
             event.isCancelled = true
         }
