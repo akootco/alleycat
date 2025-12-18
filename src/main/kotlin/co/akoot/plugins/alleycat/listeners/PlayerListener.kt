@@ -8,6 +8,7 @@ import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.invoke
 import co.akoot.plugins.bluefox.extensions.isSurventure
 import co.akoot.plugins.bluefox.extensions.sendActionBar
+import co.akoot.plugins.bluefox.util.runLater
 import co.akoot.plugins.bluefox.util.sync
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent
 import io.papermc.paper.event.player.AsyncChatEvent
@@ -82,8 +83,14 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerDeath(event: PlayerDeathEvent) {
-        if(event.player.isSilentDeath) event.deathMessage(null)
-        event.player.executeWhen(When.Event.DIE)
+        val player = event.player
+
+        if (player.isSilentDeath) event.deathMessage(null)
+        if (player.respawnsInstantly) {
+            player.spigot().respawn()
+            runLater { player.closeInventory() }
+        }
+        player.executeWhen(When.Event.DIE)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

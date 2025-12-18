@@ -14,6 +14,7 @@ import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
 import co.akoot.plugins.alleycat.extensions.Key.ALLOWED_PERMISSIONS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_OPEN_CONTAINERS
 import co.akoot.plugins.alleycat.extensions.Key.DISALLOWED_PERMISSIONS
+import co.akoot.plugins.alleycat.extensions.Key.INSTANT_RESPAWN
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
 import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.extensions.addToPDCList
@@ -42,6 +43,7 @@ object Key {
     const val CAN_OPEN_CONTAINERS = "can_open_containers"
     const val ALLOWED_PERMISSIONS = "permissions.allowed"
     const val DISALLOWED_PERMISSIONS = "permissions.disallowed"
+    const val INSTANT_RESPAWN = "instant_respawn"
 }
 
 var Player.canPickUpItems: Boolean
@@ -86,6 +88,10 @@ var Player.isSilentAdvancements: Boolean
 
 val Player.restrainingOrderTargets: List<Player>
     get() = getPDCList<Player>(AlleyCat.key(RESTRAINING_ORDER_TARGETS)) ?: listOf()
+
+var Player.respawnsInstantly: Boolean
+    get() = getPDC<Boolean>(AlleyCat.key(INSTANT_RESPAWN)) ?: false
+    set(value) = setPDC(AlleyCat.key(INSTANT_RESPAWN), value)
 
 var Player.isIncapacitated: Boolean
     get() = !(canBreakBlocks && canPickUpItems && canAttack && canPlaceBlocks && canOpenContainers)

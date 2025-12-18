@@ -28,6 +28,7 @@ class SetCommand(plugin: AlleyCat): FoxCommand(plugin, "set") {
                Key.IS_SILENT_LEAVE,
                Key.IS_SILENT_DEATH,
                Key.IS_SILENT_ADVANCEMENTS,
+                Key.INSTANT_RESPAWN,
                 "advancements_disabled"
             )
             3 -> mutableListOf("true", "false")
