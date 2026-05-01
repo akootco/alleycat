@@ -4,6 +4,7 @@ import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.Kolor
 import org.bukkit.command.CommandSender
+import org.bukkit.inventory.EquipmentSlot
 
 class HatCommand(plugin: AlleyCat): FoxCommand(plugin, "hat") {
     override fun onTabComplete(
@@ -21,7 +22,7 @@ class HatCommand(plugin: AlleyCat): FoxCommand(plugin, "hat") {
     ): Boolean {
         val player = getPlayerSender(sender).getAndSend(sender) ?: return false
         val helmet = player.inventory.helmet
-        player.inventory.helmet = player.inventory.itemInMainHand
+        player.equipment.setItem(EquipmentSlot.HEAD, player.inventory.itemInMainHand)
         player.inventory.setItemInMainHand(helmet)
         player.updateInventory()
         return true
