@@ -1,37 +1,22 @@
 package co.akoot.plugins.alleycat
 
-import co.akoot.plugins.alleycat.commands.AtCommand
-import co.akoot.plugins.alleycat.commands.FlyCommand
-import co.akoot.plugins.alleycat.commands.GamemodeCommand
-import co.akoot.plugins.alleycat.commands.HatCommand
-import co.akoot.plugins.alleycat.commands.IncapacitateCommand
-import co.akoot.plugins.alleycat.commands.SetCommand
-import co.akoot.plugins.alleycat.commands.TestCommand
-import co.akoot.plugins.alleycat.commands.WhenCommand
-import co.akoot.plugins.alleycat.commands.WhensCommand
+import co.akoot.plugins.alleycat.commands.*
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.alleycat.listeners.PenjaminListener
 import co.akoot.plugins.alleycat.listeners.PlayerListener
 import co.akoot.plugins.bluefox.api.FoxConfig
 import co.akoot.plugins.bluefox.api.FoxPlugin
-import co.akoot.plugins.bluefox.util.ColorUtil
-import co.akoot.plugins.bluefox.util.TimeUtil
 import co.akoot.plugins.bluefox.util.async
 import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.ban.BanListType
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel
-import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
-import net.kyori.adventure.text.Component
 import org.bukkit.BanEntry
 import org.bukkit.NamespacedKey
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
-import org.bukkit.event.Listener
 import java.util.*
 
 /**
