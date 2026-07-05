@@ -7,7 +7,6 @@ import co.akoot.plugins.bluefox.extensions.getPDCList
 import co.akoot.plugins.bluefox.extensions.removeFromPDCList
 import org.bukkit.OfflinePlayer
 import org.bukkit.World
-import org.bukkit.entity.Player
 
 fun World.addWhen(player: OfflinePlayer, whenDefinition: When): Boolean {
     return addToPDCList(AlleyCat.key("when.${player.uniqueId}"), whenDefinition.toString())
@@ -22,8 +21,8 @@ fun World.removeWhen(player: OfflinePlayer, whenDefinitionString: String): Boole
 }
 
 fun World.getWhenDefinitions(player: OfflinePlayer, event: When.Event? = null): List<When>? {
-    val definition =  getPDCList<String>(AlleyCat.key("when.${player.uniqueId}"))
+    val definition = getPDCList<String>(AlleyCat.key("when.${player.uniqueId}"))
         ?.mapNotNull { When.of(it) } ?: return null
-    return if(event == null) definition
+    return if (event == null) definition
     else definition.filter { it.event == event }
 }

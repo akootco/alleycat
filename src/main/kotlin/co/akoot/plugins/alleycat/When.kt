@@ -38,6 +38,7 @@ data class When(val event: Event, val timeFrame: TimeFrame, val type: Type, val 
             return runCatching { Type.valueOf(string.split(";").drop(3).joinToString(";")) }.getOrNull()
         }
     }
+
     enum class Event {
         JOIN, LEAVE, DIE, RESPAWN, TELEPORT, TALK, ATTACK, SLEEP
     }
@@ -60,12 +61,12 @@ data class When(val event: Event, val timeFrame: TimeFrame, val type: Type, val 
 
     fun execute(player: Player) {
         val commandLine = command.replace("@s", player.name)
-        if(type == Type.RUN) {
+        if (type == Type.RUN) {
             player.server.dispatchCommand(Bukkit.getConsoleSender(), commandLine)
         } else {
             player.server.dispatchCommand(player, commandLine)
         }
-        if(timeFrame == TimeFrame.NEXT) BlueFox.world?.removeWhen(player, this)
+        if (timeFrame == TimeFrame.NEXT) BlueFox.world?.removeWhen(player, this)
     }
 
 

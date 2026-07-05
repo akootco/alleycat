@@ -2,11 +2,10 @@ package co.akoot.plugins.alleycat.commands
 
 import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.bluefox.api.FoxCommand
-import co.akoot.plugins.bluefox.api.Kolor
 import org.bukkit.command.CommandSender
 import org.bukkit.inventory.EquipmentSlot
 
-class HatCommand(plugin: AlleyCat): FoxCommand(plugin, "hat") {
+class HatCommand(plugin: AlleyCat) : FoxCommand(plugin, "hat") {
     override fun onTabComplete(
         sender: CommandSender,
         alias: String,

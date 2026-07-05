@@ -9,17 +9,17 @@ import co.akoot.plugins.bluefox.util.Text.Companion.now
 import co.akoot.plugins.bluefox.util.Text.Companion.plus
 import org.bukkit.command.CommandSender
 
-class IncapacitateCommand(private val ac: AlleyCat): FoxCommand(ac, "incapacitate") {
+class IncapacitateCommand(private val ac: AlleyCat) : FoxCommand(ac, "incapacitate") {
 
     override fun onTabComplete(sender: CommandSender, alias: String, args: Array<out String>): MutableList<String> {
-        return if(hasPermission(sender)) getOnlinePlayerSuggestions(args, ac.incapacitatedPlayers.names().toSet())
+        return if (hasPermission(sender)) getOnlinePlayerSuggestions(args, ac.incapacitatedPlayers.names().toSet())
         else mutableListOf()
     }
 
     override fun onCommand(sender: CommandSender, alias: String, args: Array<out String>): Boolean {
-        return when(alias) {
+        return when (alias) {
             "incapacitate" -> {
-                return when(args.size) {
+                return when (args.size) {
                     0 -> sendUsage(sender)
                     1 -> {
                         val player = getPlayer(args[0]).getAndSend(sender) ?: return false
@@ -29,9 +29,11 @@ class IncapacitateCommand(private val ac: AlleyCat): FoxCommand(ac, "incapacitat
                             player.displayName() + Kolor.TEXT(" is ") + Kolor.ACCENT(value.now) + Kolor.TEXT(" incapacitated.")
                         ).send(sender).value
                     }
+
                     else -> sendUsage(sender)
                 }
             }
+
             else -> sendUsage(sender)
         }
     }

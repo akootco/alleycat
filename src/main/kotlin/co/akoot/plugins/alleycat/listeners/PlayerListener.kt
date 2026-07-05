@@ -25,7 +25,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.*
 import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult
 
-class PlayerListener(val plugin: AlleyCat): Listener {
+class PlayerListener(val plugin: AlleyCat) : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerPickItem(event: PlayerAttemptPickupItemEvent) {
@@ -70,14 +70,15 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
-        if(player.isSilentJoin) event.joinMessage(null)
-        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+        if (player.isSilentJoin) event.joinMessage(null)
+        if (player.isSurventure) player.allowFlight =
+            player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
         player.executeWhen(When.Event.JOIN)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerLeave(event: PlayerQuitEvent) {
-        if(event.player.isSilentLeave) event.quitMessage(null)
+        if (event.player.isSilentLeave) event.quitMessage(null)
         event.player.executeWhen(When.Event.LEAVE)
     }
 
@@ -95,13 +96,14 @@ class PlayerListener(val plugin: AlleyCat): Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAdvancementDone(event: PlayerAdvancementDoneEvent) {
-        if(event.player.isSilentAdvancements) event.message(null)
+        if (event.player.isSilentAdvancements) event.message(null)
     }
 
     @EventHandler
     fun onPlayerRespawn(event: PlayerRespawnEvent) {
         val player = event.player
-        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+        if (player.isSurventure) player.allowFlight =
+            player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
         player.executeWhen(When.Event.RESPAWN)
     }
 
@@ -119,21 +121,22 @@ class PlayerListener(val plugin: AlleyCat): Listener {
     @EventHandler
     fun onPlayerGameModeChanged(event: PlayerGameModeChangeEvent) {
         val player = event.player
-        if(player.isSurventure) player.allowFlight = player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
+        if (player.isSurventure) player.allowFlight =
+            player.getPDC<Boolean>(plugin.key("permafly")) ?: player.allowFlight
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerAdvancement(event: PlayerAdvancementCriterionGrantEvent) {
-        if(event.player.world.getPDC<Boolean>(plugin.key("advancements_disabled")) == true) event.isCancelled = true
+        if (event.player.world.getPDC<Boolean>(plugin.key("advancements_disabled")) == true) event.isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerTeleportCheck(event: PlayerTeleportEvent) {
         if (event.isCancelled) return
         val to = event.to.world
-        if(to == event.from.world) return
+        if (to == event.from.world) return
         val player = event.player
-        if(!event.player.hasPermission("alleycat.tp.world.${to.name.lowercase()}")) {
+        if (!event.player.hasPermission("alleycat.tp.world.${to.name.lowercase()}")) {
             player.sendActionBar(Kolor.WARNING("You can't go to ") + Kolor.WARNING.accent(to.name) + Kolor.WARNING("."))
             event.isCancelled = true
         }

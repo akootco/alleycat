@@ -30,7 +30,7 @@ class AlleyCat : FoxPlugin("alleycat") {
 
     companion object {
         lateinit var instance: AlleyCat
-        fun key(key: String): NamespacedKey  {
+        fun key(key: String): NamespacedKey {
             return NamespacedKey("alleycat", key)
         }
     }

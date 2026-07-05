@@ -8,14 +8,12 @@ import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.FoxCommand
 import co.akoot.plugins.bluefox.api.Kolor
 import co.akoot.plugins.bluefox.extensions.invoke
-import co.akoot.plugins.bluefox.extensions.setMeta
-import co.akoot.plugins.bluefox.extensions.setPDC
 import org.bukkit.command.CommandSender
 
-class WhenCommand(private val ac: AlleyCat): FoxCommand(ac, "when") {
+class WhenCommand(private val ac: AlleyCat) : FoxCommand(ac, "when") {
 
     override fun onTabComplete(sender: CommandSender, alias: String, args: Array<out String>): MutableList<String> {
-        return when(args.size) {
+        return when (args.size) {
             1 -> getOfflinePlayerSuggestions(args)
             2 -> Event.entries.map { "${it.name.lowercase()}s" }.toMutableList()
             3 -> TimeFrame.entries.map { it.name.lowercase() }.toMutableList()
@@ -31,16 +29,22 @@ class WhenCommand(private val ac: AlleyCat): FoxCommand(ac, "when") {
         return if (args.size < 5) sendUsage(sender)
         else {
             val player = getOfflinePlayer(args[0]).getAndSend(sender) ?: return false
-            val name = player.name ?: return Result.fail(Kolor.ERROR("Player \"") + Kolor.ERROR.accent(args[0]) + Kolor.ERROR("\" not found!")).getAndSend(sender)
-            val event = runCatching { Event.valueOf(args[1].uppercase().removeSuffix("S")) }.getOrNull() ?: return sendUsage(sender)
-            val timeFrame = runCatching { TimeFrame.valueOf(args[2].uppercase()) }.getOrNull() ?: return sendUsage(sender)
+            val name = player.name
+                ?: return Result.fail(Kolor.ERROR("Player \"") + Kolor.ERROR.accent(args[0]) + Kolor.ERROR("\" not found!"))
+                    .getAndSend(sender)
+            val event =
+                runCatching { Event.valueOf(args[1].uppercase().removeSuffix("S")) }.getOrNull() ?: return sendUsage(
+                    sender
+                )
+            val timeFrame =
+                runCatching { TimeFrame.valueOf(args[2].uppercase()) }.getOrNull() ?: return sendUsage(sender)
             val type = runCatching { Type.valueOf(args[3].uppercase()) }.getOrNull() ?: return sendUsage(sender)
             val commandLine = args.drop(4).joinToString(" ").removePrefix("/")
-            val timeFrameString = when(timeFrame) {
+            val timeFrameString = when (timeFrame) {
                 TimeFrame.NEXT -> "Next time "
                 TimeFrame.ALWAYS -> "From this time forward and henceforth, whenever "
             }
-            val typeString = when(type) {
+            val typeString = when (type) {
                 Type.RUN -> "we"
                 Type.COMPEL -> "they"
             }

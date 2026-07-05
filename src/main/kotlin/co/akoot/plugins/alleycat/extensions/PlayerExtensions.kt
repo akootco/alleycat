@@ -4,30 +4,21 @@ import co.akoot.plugins.alleycat.AlleyCat
 import co.akoot.plugins.alleycat.When
 import co.akoot.plugins.alleycat.extensions.Key.CAN_ATTACK
 import co.akoot.plugins.alleycat.extensions.Key.CAN_BREAK_BLOCKS
+import co.akoot.plugins.alleycat.extensions.Key.CAN_OPEN_CONTAINERS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_PICK_UP_ITEMS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_PLACE_BLOCKS
+import co.akoot.plugins.alleycat.extensions.Key.INSTANT_RESPAWN
 import co.akoot.plugins.alleycat.extensions.Key.IS_MUTED
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_ADVANCEMENTS
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_DEATH
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_JOIN
 import co.akoot.plugins.alleycat.extensions.Key.IS_SILENT_LEAVE
-import co.akoot.plugins.alleycat.extensions.Key.ALLOWED_PERMISSIONS
-import co.akoot.plugins.alleycat.extensions.Key.CAN_OPEN_CONTAINERS
-import co.akoot.plugins.alleycat.extensions.Key.DISALLOWED_PERMISSIONS
-import co.akoot.plugins.alleycat.extensions.Key.INSTANT_RESPAWN
 import co.akoot.plugins.alleycat.extensions.Key.RESTRAINING_ORDER_TARGETS
 import co.akoot.plugins.bluefox.BlueFox
-import co.akoot.plugins.bluefox.extensions.addToPDCList
 import co.akoot.plugins.bluefox.extensions.getPDC
 import co.akoot.plugins.bluefox.extensions.getPDCList
-import co.akoot.plugins.bluefox.extensions.removeFromPDCList
 import co.akoot.plugins.bluefox.extensions.setPDC
-import org.bukkit.OfflinePlayer
-import org.bukkit.World
 import org.bukkit.entity.Player
-import org.bukkit.permissions.PermissionAttachment
-import java.util.*
-import kotlin.collections.set
 
 object Key {
     const val CAN_PICK_UP_ITEMS = "can_pickup_items"

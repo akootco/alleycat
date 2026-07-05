@@ -24,17 +24,18 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
         plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
             channel.retrieveMessageById(messageId).queue { originalMessage ->
                 val finalMessage = message.contentRaw + message.attachments.joinToString("\n", prefix = "\n") { it.url }
-                originalMessage.reply(finalMessage).addEmbeds(message.embeds).addComponents(message.components).queue { reply ->
-                    message.addReaction(Emoji.fromUnicode("\uD83D\uDCE8")).queue()
-                    repliesMap[reply.idLong] = senderId to replyIOd
-                }
+                originalMessage.reply(finalMessage).addEmbeds(message.embeds).addComponents(message.components)
+                    .queue { reply ->
+                        message.addReaction(Emoji.fromUnicode("\uD83D\uDCE8")).queue()
+                        repliesMap[reply.idLong] = senderId to replyIOd
+                    }
             }
         }
     }
 
     fun react(id: Long, emoji: Emoji, add: Boolean = true) {
         val reply = repliesMap[id]
-        if(reply != null) {
+        if (reply != null) {
             val userId = reply.first
             val messageId = reply.second
             plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
@@ -48,7 +49,7 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
         val userId = userMessageMap.entries.find { messageId in it.value }?.key ?: return
         plugin.penjamin?.openPrivateChannelById(userId)?.queue { channel ->
             channel.retrieveMessageById(messageId).queue { originalMessage ->
-                if(add) originalMessage.addReaction(emoji).queue()
+                if (add) originalMessage.addReaction(emoji).queue()
                 else originalMessage.removeReaction(emoji).queue()
             }
         }
@@ -66,17 +67,19 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
             recipient.openPrivateChannel().queue { channel ->
                 channel.sendMessage("**Anonymous says**\n$finalMessage").addEmbeds(message.embeds)
                     .addComponents(message.components).queue { forward ->
-                    userMessageMap.getOrPut(sender) { mutableSetOf(message.idLong) }.add(message.idLong)
-                    messageMap.getOrPut(message.idLong) { mutableSetOf(forward.idLong) }.add(forward.idLong)
-                    message.addReaction(Emoji.fromUnicode("\uD83D\uDCE8")).queue()
-                    for (forward in message.messageSnapshots) {
-                        val finalForward = forward.contentRaw + forward.attachments.joinToString("\n", prefix = "\n") { it.url }
-                        channel.sendMessage("> $finalForward").addEmbeds(forward.embeds)
-                            .addComponents(forward.components).queue { forward ->
-                            messageMap.getOrPut(message.idLong) { mutableSetOf(forward.idLong) }.add(forward.idLong)
+                        userMessageMap.getOrPut(sender) { mutableSetOf(message.idLong) }.add(message.idLong)
+                        messageMap.getOrPut(message.idLong) { mutableSetOf(forward.idLong) }.add(forward.idLong)
+                        message.addReaction(Emoji.fromUnicode("\uD83D\uDCE8")).queue()
+                        for (forward in message.messageSnapshots) {
+                            val finalForward =
+                                forward.contentRaw + forward.attachments.joinToString("\n", prefix = "\n") { it.url }
+                            channel.sendMessage("> $finalForward").addEmbeds(forward.embeds)
+                                .addComponents(forward.components).queue { forward ->
+                                    messageMap.getOrPut(message.idLong) { mutableSetOf(forward.idLong) }
+                                        .add(forward.idLong)
+                                }
                         }
                     }
-                }
             }
         }
     }
@@ -110,25 +113,29 @@ class PenjaminListener(private val plugin: AlleyCat) : ListenerAdapter() {
                         plugin.settings.append("penjamin.blocked", originalSenderId)
                         message.addReaction(Emoji.fromUnicode("✅")).queue()
                     }
+
                     "!unblock" -> {
                         plugin.settings.remove("penjamin.blocked", originalSenderId)
                         message.addReaction(Emoji.fromUnicode("✅")).queue()
                     }
+
                     "!premium" -> {
                         plugin.settings.append("penjamin.premium", originalSenderId)
                         message.addReaction(Emoji.fromUnicode("✅")).queue()
                     }
+
                     "!unpremium" -> {
                         plugin.settings.remove("penjamin.premium", originalSenderId)
                         message.addReaction(Emoji.fromUnicode("✅")).queue()
                     }
+
                     else -> reply(sender, it, message.idLong, message)
                 }
                 return
             }
         }
 
-        if(sender !in plugin.settings.getLongList("penjamin.premium")) {
+        if (sender !in plugin.settings.getLongList("penjamin.premium")) {
             val size = userMessageMap[sender]?.size ?: 1
             if (size > limit) {
                 message.addReaction(Emoji.fromUnicode("❌")).queue()
