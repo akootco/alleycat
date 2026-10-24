@@ -119,7 +119,7 @@ class AlleyCat : FoxPlugin("alleycat") {
     override fun registerCommands() {
 //        registerCommand(TestCommand(this))
         registerCommand(IncapacitateCommand(this))
-        registerCommand(WhenCommand(this))
+        registerCommand(WhenCommand)
         registerCommand(WhensCommand(this))
         registerCommand(SetCommand(this))
         registerCommand(FlyCommand(this))

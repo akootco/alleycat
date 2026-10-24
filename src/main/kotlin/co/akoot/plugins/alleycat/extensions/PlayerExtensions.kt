@@ -96,4 +96,7 @@ var Player.isIncapacitated: Boolean
 
 fun Player.executeWhen(event: When.Event) {
     BlueFox.world?.getWhenDefinitions(this, event)?.forEach { it.execute(this) }
+    if(!hasPlayedBefore()) {
+        BlueFox.world?.getWhenDefinitions("#newPlayer", event)?.forEach { it.execute(this) }
+    }
 }
