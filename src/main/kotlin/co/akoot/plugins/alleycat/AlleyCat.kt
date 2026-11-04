@@ -4,13 +4,13 @@ import co.akoot.plugins.alleycat.commands.*
 import co.akoot.plugins.alleycat.extensions.isIncapacitated
 import co.akoot.plugins.alleycat.listeners.PenjaminListener
 import co.akoot.plugins.alleycat.listeners.PlayerListener
+import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.FoxConfig
 import co.akoot.plugins.bluefox.api.FoxPlugin
 import co.akoot.plugins.bluefox.util.async
 import com.destroystokyo.paper.profile.PlayerProfile
 import io.papermc.paper.ban.BanListType
 import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.bukkit.BanEntry
@@ -37,39 +37,32 @@ class AlleyCat : FoxPlugin("alleycat") {
 
     override fun load() {
         instance = this
-        penjamin = createPenjamin()
-        async {
-            penjamin?.awaitReady()
-            for (id in settings.getLongList("penjamin.recipients")) {
-                penjamin?.retrieveUserById(id)?.queue {
-                    dmRecipients.add(it)
-                    println("adding $id to penjamin's list")
+        val discordToken = BlueFox.getDiscordToken(auth)
+        if (discordToken != null) {
+            penjamin =
+                BlueFox.getJDA(
+                    discordToken,
+                    GatewayIntent.MESSAGE_CONTENT,
+                    GatewayIntent.DIRECT_MESSAGES,
+                    GatewayIntent.GUILD_MEMBERS
+                )
+            async {
+                penjamin?.awaitReady()
+                for (id in settings.getLongList("penjamin.recipients")) {
+                    penjamin?.retrieveUserById(id)?.queue {
+                        dmRecipients.add(it)
+                        println("adding $id to penjamin's list")
+                    }
                 }
+                logger.info("[JDA] Logged in as ${penjamin?.selfUser?.effectiveName}")
             }
+            penjamin?.addEventListener(PenjaminListener(this))
         }
-        penjamin?.addEventListener(PenjaminListener(this))
         logger.info("I'll see what I can do...!")
     }
 
     override fun unload() {
         // Plugin shutdown logic
-    }
-
-    fun createPenjamin(): JDA? {
-        val token = auth.getString("discord.token")
-        if (token == null) {
-            logger.severe("Invalid Discord Token in auth.conf, Discord features disabled.")
-            return null
-        }
-        val builder = JDABuilder.createDefault(token)
-        builder.enableIntents(GatewayIntent.GUILD_MEMBERS)
-        return try {
-            builder.build()
-        } catch (e: Exception) {
-            logger.severe("Could not load JDA, Discord features disabled.")
-            e.printStackTrace()
-            null
-        }
     }
 
     override fun registerEvents() {
