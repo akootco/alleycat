@@ -1,4 +1,4 @@
-package co.akoot.plugins.alleycat
+package co.akoot.plugins.alleycat.api
 
 import co.akoot.plugins.alleycat.extensions.removeWhen
 import co.akoot.plugins.bluefox.BlueFox

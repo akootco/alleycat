@@ -1,8 +1,8 @@
 package co.akoot.plugins.alleycat.commands
 
 import co.akoot.plugins.alleycat.AlleyCat
-import co.akoot.plugins.alleycat.When
-import co.akoot.plugins.alleycat.When.*
+import co.akoot.plugins.alleycat.api.When
+import co.akoot.plugins.alleycat.api.When.*
 import co.akoot.plugins.alleycat.extensions.addWhen
 import co.akoot.plugins.bluefox.BlueFox
 import co.akoot.plugins.bluefox.api.CatCommand
@@ -14,7 +14,7 @@ object WhenCommand : CatCommand(AlleyCat.instance, "when", "Do stuff when player
             suggest(builder, BlueFox.cachedOfflinePlayerNames.apply {
                 addAll(
                     listOf(
-                        "--newPlayer"
+                        "--new_player"
                     )
                 )
             }, usernames = true)

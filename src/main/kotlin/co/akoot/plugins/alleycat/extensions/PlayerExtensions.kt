@@ -1,7 +1,7 @@
 package co.akoot.plugins.alleycat.extensions
 
 import co.akoot.plugins.alleycat.AlleyCat
-import co.akoot.plugins.alleycat.When
+import co.akoot.plugins.alleycat.api.When
 import co.akoot.plugins.alleycat.extensions.Key.CAN_ATTACK
 import co.akoot.plugins.alleycat.extensions.Key.CAN_BREAK_BLOCKS
 import co.akoot.plugins.alleycat.extensions.Key.CAN_OPEN_CONTAINERS
@@ -97,6 +97,6 @@ var Player.isIncapacitated: Boolean
 fun Player.executeWhen(event: When.Event) {
     BlueFox.world?.getWhenDefinitions(this, event)?.forEach { it.execute(this) }
     if (!hasPlayedBefore()) {
-        BlueFox.world?.getWhenDefinitions("--newPlayer", event)?.forEach { it.execute(this) }
+        BlueFox.world?.getWhenDefinitions("--new_player", event)?.forEach { it.execute(this) }
     }
 }

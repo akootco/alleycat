@@ -1,7 +1,7 @@
 package co.akoot.plugins.alleycat.extensions
 
 import co.akoot.plugins.alleycat.AlleyCat
-import co.akoot.plugins.alleycat.When
+import co.akoot.plugins.alleycat.api.When
 import co.akoot.plugins.bluefox.extensions.addToPDCList
 import co.akoot.plugins.bluefox.extensions.getPDCList
 import co.akoot.plugins.bluefox.extensions.removeFromPDCList
